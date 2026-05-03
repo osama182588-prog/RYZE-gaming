@@ -18,6 +18,20 @@ export const BRAND = {
   ],
   manifesto:
     'RYZE is not a brand. It is a movement. A high-voltage uprising of players who refuse the ordinary — engineered for those who play to dominate, not to participate.',
+  // Arabic localized brand content
+  ar: {
+    tagline: 'انهض. العب. سيطر.',
+    taglines: [
+      'انهض. العب. سيطر.',
+      'معدات مُصاغة للعصر القادم.',
+      'مبنية لمن يرفضون الخسارة.',
+      'وقود نيون للّعب النخبوي.',
+      'عالم ألعاب بلا حدود.',
+    ],
+    manifesto:
+      'RYZE ليست علامة تجارية. إنها حركة. انتفاضة عالية الجهد للاعبين الذين يرفضون العادية — مُصممة لمن يلعبون للسيطرة، لا للمشاركة.',
+    fullName: 'RYZE للألعاب',
+  },
   voice: {
     personality: ['aggressive', 'futuristic', 'elite', 'competitive', 'cinematic'],
     do: ['Be bold', 'Use short, punchy sentences', 'Speak to elite players', 'Use precise tech language'],

@@ -12,14 +12,15 @@ import { useAuth } from '@/store/auth';
 import { CATEGORIES } from '@/data/categories';
 import { cn } from '@/lib/utils';
 import { SearchOverlay } from './search-overlay';
+import { t } from '@/i18n';
 
 const NAV = [
-  { href: '/shop', label: 'Shop' },
-  { href: '/drops', label: 'Drops' },
-  { href: '/build-setup', label: 'Build' },
-  { href: '/setups', label: 'Setups' },
-  { href: '/creators', label: 'Creators' },
-  { href: '/about', label: 'Manifesto' },
+  { href: '/shop', label: t('nav.shop') },
+  { href: '/drops', label: t('nav.drops') },
+  { href: '/build-setup', label: t('nav.build') },
+  { href: '/setups', label: t('nav.setups') },
+  { href: '/creators', label: t('nav.creators') },
+  { href: '/about', label: t('nav.manifesto') },
 ];
 
 export function Navbar() {
@@ -70,7 +71,7 @@ export function Navbar() {
           >
             <Logo size="sm" />
 
-            <nav className="ml-4 hidden items-center gap-1 lg:flex">
+            <nav className="me-4 hidden items-center gap-1 lg:flex">
               <div
                 className="relative"
                 onMouseEnter={() => setShopOpen(true)}
@@ -85,7 +86,7 @@ export function Navbar() {
                       : 'text-white/65 hover:text-white',
                   )}
                 >
-                  Shop
+                  {t('nav.shop')}
                 </Link>
                 <AnimatePresence>
                   {shopOpen && (
@@ -94,7 +95,7 @@ export function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 8 }}
                       transition={{ duration: 0.18 }}
-                      className="absolute left-0 top-full pt-2"
+                      className="absolute end-0 top-full pt-2"
                     >
                       <div className="glass-card grid w-[560px] grid-cols-2 gap-1 p-3 shadow-neon-purple">
                         {CATEGORIES.map((c) => (
@@ -162,10 +163,10 @@ export function Navbar() {
               })}
             </nav>
 
-            <div className="ml-auto flex items-center gap-2">
+            <div className="ms-auto flex items-center gap-2">
               <button
                 type="button"
-                aria-label="Search"
+                aria-label={t('nav.search')}
                 onClick={() => setSearchOpen(true)}
                 className="btn-icon"
               >
@@ -174,7 +175,7 @@ export function Navbar() {
 
               <Link
                 href={user ? '/account' : '/auth/login'}
-                aria-label={user ? 'Account' : 'Sign in'}
+                aria-label={user ? t('nav.account') : t('nav.signIn')}
                 className="btn-icon"
               >
                 <User2 className="h-4 w-4" />
@@ -182,13 +183,13 @@ export function Navbar() {
 
               <button
                 type="button"
-                aria-label="Cart"
+                aria-label={t('nav.cart')}
                 onClick={() => setOpen(true)}
                 className="btn-icon relative"
               >
                 <ShoppingBag className="h-4 w-4" />
                 {cartCount > 0 && (
-                  <span className="absolute -right-1 -top-1 grid h-5 min-w-[20px] place-items-center rounded-full bg-neon-pink px-1 text-[10px] font-bold text-void shadow-neon-pink">
+                  <span className="absolute -start-1 -top-1 grid h-5 min-w-[20px] place-items-center rounded-full bg-neon-pink px-1 text-[10px] font-bold text-void shadow-neon-pink">
                     {cartCount}
                   </span>
                 )}
@@ -196,7 +197,7 @@ export function Navbar() {
 
               <button
                 type="button"
-                aria-label="Toggle menu"
+                aria-label={t('common.close')}
                 onClick={() => setMenuOpen(!menuOpen)}
                 className="btn-icon lg:hidden"
               >
@@ -226,10 +227,10 @@ export function Navbar() {
               className="ryze-container mt-24 flex flex-col gap-1"
             >
               {[
-                { href: '/shop', label: 'Shop' },
+                { href: '/shop', label: t('nav.shop') },
                 ...CATEGORIES.map((c) => ({ href: `/shop/${c.slug}`, label: `· ${c.name}` })),
                 ...NAV.slice(1),
-                user ? { href: '/account', label: 'Account' } : { href: '/auth/login', label: 'Sign in' },
+                user ? { href: '/account', label: t('nav.account') } : { href: '/auth/login', label: t('nav.signIn') },
               ].map((item) => (
                 <Link
                   key={item.href + item.label}

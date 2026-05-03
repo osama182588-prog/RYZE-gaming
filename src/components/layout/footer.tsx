@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { ArrowRight, Github, Instagram, Twitter, Youtube } from 'lucide-react';
+import { ArrowLeft, Github, Instagram, Twitter, Youtube } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
 import { BRAND } from '@/lib/brand';
 import { useUi } from '@/store/ui';
 import { CATEGORIES } from '@/data/categories';
+import { t } from '@/i18n';
 
 export function Footer() {
   const [email, setEmail] = useState('');
@@ -24,17 +25,17 @@ export function Footer() {
         body: JSON.stringify({ email }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || 'Subscription failed');
+      if (!res.ok) throw new Error(data.error || t('errors.somethingGlitched'));
       showToast({
-        title: 'Locked in.',
-        description: 'You just joined the next wave. Drops incoming.',
+        title: t('toasts.lockedIn'),
+        description: t('toasts.joinedWave'),
         tone: 'success',
       });
       setEmail('');
     } catch (err) {
       showToast({
-        title: 'Something glitched.',
-        description: err instanceof Error ? err.message : 'Try again in a moment.',
+        title: t('errors.somethingGlitched'),
+        description: err instanceof Error ? err.message : t('errors.tryAgain'),
         tone: 'error',
       });
     } finally {
@@ -56,12 +57,12 @@ export function Footer() {
           />
           <div className="relative grid gap-8 md:grid-cols-2 md:items-center">
             <div>
-              <span className="section-eyebrow">Transmission</span>
+              <span className="section-eyebrow">{t('footer.transmission')}</span>
               <h3 className="mt-4 font-display text-3xl font-black sm:text-4xl">
-                Get the next drop <span className="neon-text-static">first.</span>
+                {t('footer.getNextDrop')} <span className="neon-text-static">{t('footer.first')}</span>
               </h3>
               <p className="mt-3 text-white/60">
-                Join the RYZE signal. Limited drops, early access, behind-the-scenes from pros.
+                {t('footer.joinSignal')}
               </p>
             </div>
             <form onSubmit={onSubscribe} className="flex flex-col gap-3 sm:flex-row">
@@ -74,9 +75,9 @@ export function Footer() {
                 className="input flex-1"
               />
               <button type="submit" disabled={submitting} className="btn-primary disabled:opacity-50">
-                {submitting ? 'Sending…' : (
+                {submitting ? t('footer.sending') : (
                   <>
-                    Subscribe <ArrowRight className="h-4 w-4" />
+                    {t('footer.subscribe')} <ArrowLeft className="h-4 w-4" />
                   </>
                 )}
               </button>
@@ -88,7 +89,7 @@ export function Footer() {
         <div className="mt-16 grid gap-12 md:grid-cols-5">
           <div className="md:col-span-2">
             <Logo size="md" />
-            <p className="mt-4 max-w-sm text-sm text-white/60">{BRAND.manifesto}</p>
+            <p className="mt-4 max-w-sm text-sm text-white/60">{BRAND.ar.manifesto}</p>
             <div className="mt-6 flex items-center gap-2">
               {[
                 { Icon: Twitter, href: BRAND.social.twitter, label: 'Twitter' },
@@ -103,30 +104,30 @@ export function Footer() {
             </div>
           </div>
           <FooterCol
-            title="Shop"
+            title={t('footer.shopTitle')}
             links={[
-              { href: '/shop', label: 'All Gear' },
+              { href: '/shop', label: t('footer.allGear') },
               ...CATEGORIES.slice(0, 5).map((c) => ({ href: `/shop/${c.slug}`, label: c.name })),
             ]}
           />
           <FooterCol
-            title="Universe"
+            title={t('footer.universeTitle')}
             links={[
-              { href: '/drops', label: 'Limited Drops' },
-              { href: '/build-setup', label: 'Build Your Setup' },
-              { href: '/setups', label: 'Community Setups' },
-              { href: '/creators', label: 'Creators' },
-              { href: '/about', label: 'Manifesto' },
+              { href: '/drops', label: t('footer.limitedDrops') },
+              { href: '/build-setup', label: t('footer.buildSetup') },
+              { href: '/setups', label: t('footer.communitySetups') },
+              { href: '/creators', label: t('footer.creatorsLink') },
+              { href: '/about', label: t('footer.manifestoLink') },
             ]}
           />
           <FooterCol
-            title="Support"
+            title={t('footer.supportTitle')}
             links={[
-              { href: '/account', label: 'My Account' },
-              { href: '/cart', label: 'Cart' },
-              { href: '#', label: 'Shipping & Returns' },
-              { href: '#', label: 'Warranty' },
-              { href: `mailto:${BRAND.contact.email}`, label: 'Contact' },
+              { href: '/account', label: t('footer.myAccount') },
+              { href: '/cart', label: t('footer.cartLink') },
+              { href: '#', label: t('footer.shippingReturns') },
+              { href: '#', label: t('footer.warranty') },
+              { href: `mailto:${BRAND.contact.email}`, label: t('footer.contact') },
             ]}
           />
         </div>
@@ -134,10 +135,10 @@ export function Footer() {
         <div className="neon-divider mt-12" />
         <div className="mt-6 flex flex-col items-center justify-between gap-3 text-xs text-white/40 sm:flex-row">
           <p>
-            © {new Date().getFullYear()} {BRAND.fullName}. All rights reserved.
+            © {new Date().getFullYear()} {BRAND.ar.fullName}. {t('footer.allRights')}
           </p>
-          <p className="font-mono uppercase tracking-widest">
-            {BRAND.tagline}
+          <p className="font-mono">
+            {BRAND.ar.tagline}
           </p>
         </div>
       </div>
@@ -154,7 +155,7 @@ function FooterCol({
 }) {
   return (
     <div>
-      <p className="mb-4 text-[10px] font-bold uppercase tracking-widest text-white/40">
+      <p className="mb-4 text-[10px] font-bold text-white/40">
         {title}
       </p>
       <ul className="flex flex-col gap-2">

@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { Zap, ArrowRight } from 'lucide-react';
+import { Zap, ArrowLeft } from 'lucide-react';
 import { DROPS } from '@/data/community';
 import { Countdown } from '@/components/ui/countdown';
 import { Reveal } from '@/components/ui/reveal';
 import { SectionHeading } from '@/components/ui/section-heading';
+import { t } from '@/i18n';
 
 export function DropsSection() {
   const featured = DROPS.find((d) => d.status === 'live') ?? DROPS[0];
@@ -15,9 +16,9 @@ export function DropsSection() {
     <section className="ryze-container py-24">
       <Reveal>
         <SectionHeading
-          eyebrow="Limited Drops"
-          title="Time-locked. Numbered. Untouchable."
-          subtitle="Capsule releases co-engineered with pro players. Once they're gone, they're gone."
+          eyebrow={t('drops.eyebrow')}
+          title={t('drops.title')}
+          subtitle={t('drops.subtitle')}
         />
       </Reveal>
 
@@ -41,7 +42,7 @@ export function DropsSection() {
                 <div className="flex items-center gap-2">
                   <span className="badge-limited">
                     <Zap className="h-2.5 w-2.5" />
-                    {featured.status === 'live' ? 'Live now' : 'Releasing soon'}
+                    {featured.status === 'live' ? t('drops.liveNow') : t('drops.releasingSoon')}
                   </span>
                   <span className="badge-pro">{featured.rarity}</span>
                 </div>
@@ -53,15 +54,15 @@ export function DropsSection() {
                 </p>
                 <div className="mt-6 flex flex-wrap items-end gap-6">
                   <div>
-                    <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-white/50">
-                      {featured.status === 'live' ? 'Ends in' : 'Releases in'}
+                    <p className="mb-2 text-[10px] font-bold text-white/50">
+                      {featured.status === 'live' ? t('drops.endsIn') : t('drops.releasesIn')}
                     </p>
                     <Countdown
                       to={featured.status === 'live' && featured.endsAt ? featured.endsAt : featured.releaseAt}
                     />
                   </div>
                   <span className="btn-primary">
-                    Reserve <ArrowRight className="h-4 w-4" />
+                    {t('drops.reserve')} <ArrowLeft className="h-4 w-4" />
                   </span>
                 </div>
               </div>
@@ -84,7 +85,7 @@ export function DropsSection() {
                   />
                 </div>
                 <div className="flex flex-1 flex-col justify-center">
-                  <span className="badge-new w-fit">{d.status}</span>
+                  <span className="badge-new w-fit">{d.status === 'upcoming' ? t('drops.upcoming') : d.status === 'live' ? t('drops.live') : t('drops.soldOut')}</span>
                   <h4 className="mt-2 font-display text-lg font-bold text-white">{d.name}</h4>
                   <p className="line-clamp-1 text-xs text-white/50">{d.tagline}</p>
                   <div className="mt-2">

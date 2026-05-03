@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Orbitron, JetBrains_Mono } from 'next/font/google';
+import { Cairo, Tajawal, IBM_Plex_Sans_Arabic } from 'next/font/google';
 import { BRAND } from '@/lib/brand';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
@@ -8,53 +8,60 @@ import { CustomCursor } from '@/components/effects/custom-cursor';
 import { ToastHost } from '@/components/ui/toast';
 import './globals.css';
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
+// Arabic-friendly fonts
+const cairo = Cairo({
+  subsets: ['arabic', 'latin'],
+  variable: '--font-cairo',
   display: 'swap',
 });
-const orbitron = Orbitron({
-  subsets: ['latin'],
-  variable: '--font-orbitron',
+
+const tajawal = Tajawal({
+  subsets: ['arabic', 'latin'],
+  variable: '--font-tajawal',
   display: 'swap',
-  weight: ['500', '700', '900'],
+  weight: ['400', '500', '700', '800', '900'],
 });
-const jet = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains',
+
+const ibmArabic = IBM_Plex_Sans_Arabic({
+  subsets: ['arabic', 'latin'],
+  variable: '--font-ibm-arabic',
   display: 'swap',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
-    default: `${BRAND.name} — ${BRAND.tagline}`,
+    default: `${BRAND.name} — ${BRAND.ar.tagline}`,
     template: `%s · ${BRAND.name}`,
   },
-  description: BRAND.manifesto,
+  description: BRAND.ar.manifesto,
   applicationName: BRAND.name,
   keywords: [
+    'ألعاب',
+    'رياضات إلكترونية',
+    'مفرش فأرة',
+    'إضاءة RGB',
+    'أغطية مفاتيح',
+    'هودي جيمنج',
+    'كرسي ألعاب',
+    'معدات سايبربانك',
+    'RYZE',
     'gaming',
     'esports',
-    'mousepad',
-    'rgb',
-    'keycaps',
-    'gaming hoodie',
-    'gaming chair',
-    'cyberpunk gear',
-    'RYZE',
   ],
   authors: [{ name: BRAND.name }],
   openGraph: {
     type: 'website',
-    title: `${BRAND.name} — ${BRAND.tagline}`,
-    description: BRAND.manifesto,
+    locale: 'ar_SA',
+    title: `${BRAND.name} — ${BRAND.ar.tagline}`,
+    description: BRAND.ar.manifesto,
     siteName: BRAND.name,
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${BRAND.name} — ${BRAND.tagline}`,
-    description: BRAND.manifesto,
+    title: `${BRAND.name} — ${BRAND.ar.tagline}`,
+    description: BRAND.ar.manifesto,
   },
   robots: { index: true, follow: true },
 };
@@ -71,7 +78,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${orbitron.variable} ${jet.variable}`}>
+    <html 
+      lang="ar" 
+      dir="rtl" 
+      suppressHydrationWarning 
+      className={`${cairo.variable} ${tajawal.variable} ${ibmArabic.variable}`}
+    >
       <body>
         {/* Cinematic background stack */}
         <div className="aurora-bg" aria-hidden />

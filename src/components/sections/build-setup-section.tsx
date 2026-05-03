@@ -1,16 +1,17 @@
 'use client';
 
-import { Layers, ArrowRight, Cpu, Lightbulb, Mouse } from 'lucide-react';
+import { Layers, ArrowLeft, Cpu, Lightbulb, Mouse } from 'lucide-react';
 import Link from 'next/link';
 import { Reveal } from '@/components/ui/reveal';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { MagneticButton } from '@/components/ui/magnetic-button';
+import { t } from '@/i18n';
 
 const STEPS = [
-  { Icon: Mouse, title: 'Surface', text: 'Choose your glide.' },
-  { Icon: Cpu, title: 'Core', text: 'Pick your weapon.' },
-  { Icon: Lightbulb, title: 'Lighting', text: 'Set the mood.' },
-  { Icon: Layers, title: 'Stack', text: 'Save & share.' },
+  { Icon: Mouse, title: t('buildSetup.step1Title'), text: t('buildSetup.step1Text') },
+  { Icon: Cpu, title: t('buildSetup.step2Title'), text: t('buildSetup.step2Text') },
+  { Icon: Lightbulb, title: t('buildSetup.step3Title'), text: t('buildSetup.step3Text') },
+  { Icon: Layers, title: t('buildSetup.step4Title'), text: t('buildSetup.step4Text') },
 ];
 
 export function BuildSetupSection() {
@@ -29,9 +30,9 @@ export function BuildSetupSection() {
           <div>
             <Reveal>
               <SectionHeading
-                eyebrow="Build Your Setup"
-                title="Modular. Reactive. Yours."
-                subtitle="A live configurator that turns your dream battlestation into a click-and-checkout build."
+                eyebrow={t('buildSetup.eyebrow')}
+                title={t('buildSetup.title')}
+                subtitle={t('buildSetup.subtitle')}
               />
             </Reveal>
 
@@ -43,8 +44,8 @@ export function BuildSetupSection() {
                       <Icon className="h-4 w-4 text-neon-blue" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">
-                        Step {i + 1}
+                      <p className="text-[10px] font-bold text-white/40">
+                        {t('buildSetup.step')} {i + 1}
                       </p>
                       <p className="font-display text-sm font-bold text-white">{title}</p>
                       <p className="text-xs text-white/50">{text}</p>
@@ -57,13 +58,13 @@ export function BuildSetupSection() {
             <Reveal delay={0.2}>
               <div className="mt-8 flex flex-wrap gap-3">
                 <MagneticButton href="/build-setup" variant="primary">
-                  Start Building <ArrowRight className="h-4 w-4" />
+                  {t('buildSetup.startBuilding')} <ArrowLeft className="h-4 w-4" />
                 </MagneticButton>
                 <Link
                   href="/setups"
                   className="text-sm font-semibold text-white/70 hover:text-white"
                 >
-                  Or explore setups →
+                  {t('buildSetup.exploreSetups')} ←
                 </Link>
               </div>
             </Reveal>
@@ -74,18 +75,18 @@ export function BuildSetupSection() {
               <div className="relative overflow-hidden rounded-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?auto=format&fit=crop&w=1200&q=80"
-                  alt="RYZE setup configurator preview"
+                  alt={t('buildSetup.previewAlt')}
                   className="aspect-[5/4] w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-void-950 via-void-950/30 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 grid grid-cols-3 gap-2 p-4 sm:p-6">
                   {[
-                    ['Mousepad', 'Voidweave XL'],
-                    ['Headset', 'Eclipse Pro'],
-                    ['Lighting', 'Orbital Bars'],
+                    [t('buildSetup.mousepad'), 'Voidweave XL'],
+                    [t('buildSetup.headset'), 'Eclipse Pro'],
+                    [t('buildSetup.lighting'), 'Orbital Bars'],
                   ].map(([k, v]) => (
                     <div key={k} className="glass rounded-xl p-3">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-neon-blue">
+                      <p className="text-[10px] font-bold text-neon-blue">
                         {k}
                       </p>
                       <p className="mt-1 truncate text-sm font-semibold">{v}</p>
@@ -93,8 +94,8 @@ export function BuildSetupSection() {
                   ))}
                 </div>
                 {/* hud corners */}
-                <span className="absolute left-3 top-3 h-3 w-3 border-l border-t border-neon-purple" />
-                <span className="absolute right-3 top-3 h-3 w-3 border-r border-t border-neon-blue" />
+                <span className="absolute start-3 top-3 h-3 w-3 border-s border-t border-neon-purple" />
+                <span className="absolute end-3 top-3 h-3 w-3 border-e border-t border-neon-blue" />
               </div>
             </div>
           </Reveal>
