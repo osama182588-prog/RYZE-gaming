@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpLeft } from 'lucide-react';
 import { CATEGORIES } from '@/data/categories';
 import { TiltCard } from '@/components/ui/tilt-card';
 import { Reveal, RevealItem, RevealList } from '@/components/ui/reveal';
 import { SectionHeading } from '@/components/ui/section-heading';
+import { t } from '@/i18n';
 
 const accentMap = {
   purple: { glow: 'shadow-neon-purple', text: 'text-neon-purple', bar: 'from-neon-purple' },
@@ -20,9 +21,9 @@ export function CategoriesSection() {
       <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
         <Reveal>
           <SectionHeading
-            eyebrow="The Arsenal"
-            title="Forged for every battlefield."
-            subtitle="From mousepads to thrones — every category engineered around the competitive mind."
+            eyebrow={t('categories.eyebrow')}
+            title={t('categories.title')}
+            subtitle={t('categories.subtitle')}
           />
         </Reveal>
         <Reveal delay={0.1}>
@@ -30,8 +31,8 @@ export function CategoriesSection() {
             href="/shop"
             className="group inline-flex items-center gap-2 text-sm font-semibold text-white/70 hover:text-white"
           >
-            Browse all categories
-            <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            {t('categories.browseAll')}
+            <ArrowUpLeft className="h-4 w-4 transition group-hover:translate-y-0.5 group-hover:-translate-x-0.5" />
           </Link>
         </Reveal>
       </div>
@@ -57,19 +58,19 @@ export function CategoriesSection() {
                   <div className="absolute inset-0 bg-gradient-to-t from-void-950/95 via-void-950/40 to-transparent" />
                   <div className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r ${accent.bar} via-transparent`} />
                   <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-                    <p className={`text-[10px] font-bold uppercase tracking-widest ${accent.text}`}>
+                    <p className={`text-[10px] font-bold ${accent.text}`}>
                       {c.tagline}
                     </p>
                     <h3 className="mt-1 font-display text-xl font-black text-white sm:text-2xl">
                       {c.name}
                     </h3>
                     <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-white/60 transition group-hover:text-white">
-                      Enter <ArrowUpRight className="h-3.5 w-3.5" />
+                      {t('categories.enter')} <ArrowUpLeft className="h-3.5 w-3.5" />
                     </span>
                   </div>
                   {/* corner brackets */}
-                  <span className="absolute left-2 top-2 h-2 w-2 border-l border-t border-white/40" />
-                  <span className="absolute right-2 top-2 h-2 w-2 border-r border-t border-white/40" />
+                  <span className="absolute start-2 top-2 h-2 w-2 border-s border-t border-white/40" />
+                  <span className="absolute end-2 top-2 h-2 w-2 border-e border-t border-white/40" />
                 </Link>
               </TiltCard>
             </RevealItem>

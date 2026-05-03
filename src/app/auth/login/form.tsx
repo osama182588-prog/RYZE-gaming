@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowRight, Lock, Mail } from 'lucide-react';
+import { ArrowLeft, Lock, Mail } from 'lucide-react';
 import { useAuth } from '@/store/auth';
 import { useUi } from '@/store/ui';
 import { Logo } from '@/components/ui/logo';
+import { t } from '@/i18n';
 
 export function LoginForm() {
   const router = useRouter();
@@ -34,13 +35,13 @@ export function LoginForm() {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Login failed');
+      if (!res.ok) throw new Error(data.error || t('authPage.signInFailed'));
       setUser(data.user);
-      showToast({ title: `Welcome back, ${data.user.username}`, tone: 'success' });
+      showToast({ title: `${t('authPage.welcomeBack')}، ${data.user.username}`, tone: 'success' });
       router.push(sp.get('next') || '/account');
     } catch (err) {
       showToast({
-        title: 'Sign in failed',
+        title: t('authPage.signInFailed'),
         description: err instanceof Error ? err.message : '',
         tone: 'error',
       });
@@ -54,56 +55,56 @@ export function LoginForm() {
       <div className="glass-card w-full max-w-md p-8">
         <div className="mb-6 flex flex-col items-center text-center">
           <Logo size="lg" href={null} />
-          <h1 className="mt-4 font-display text-3xl font-black">Welcome back</h1>
-          <p className="mt-1 text-sm text-white/60">Sign in to access your loadout.</p>
+          <h1 className="mt-4 font-display text-3xl font-black">{t('authPage.welcomeBack')}</h1>
+          <p className="mt-1 text-sm text-white/60">{t('authPage.signInToAccess')}</p>
         </div>
         <form onSubmit={submit} className="space-y-4">
           <div>
-            <label className="label" htmlFor="email">Email</label>
+            <label className="label" htmlFor="email">{t('authPage.email')}</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+              <Mail className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
               <input
                 id="email"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input pl-9"
+                className="input ps-9"
                 placeholder="you@ryze.gg"
               />
             </div>
           </div>
           <div>
-            <label className="label" htmlFor="password">Password</label>
+            <label className="label" htmlFor="password">{t('authPage.password')}</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+              <Lock className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
               <input
                 id="password"
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input pl-9"
+                className="input ps-9"
                 placeholder="••••••••"
               />
             </div>
           </div>
           <button type="submit" disabled={submitting} className="btn-primary w-full justify-center">
-            {submitting ? 'Signing in…' : (
+            {submitting ? t('authPage.signingIn') : (
               <>
-                Sign in <ArrowRight className="h-4 w-4" />
+                {t('authPage.signIn')} <ArrowLeft className="h-4 w-4" />
               </>
             )}
           </button>
         </form>
         <p className="mt-4 text-center text-xs text-white/50">
-          New here?{' '}
+          {t('authPage.newHere')}{' '}
           <Link href="/auth/signup" className="text-neon-blue hover:underline">
-            Create an account
+            {t('authPage.createAccount')}
           </Link>
         </p>
         <div className="mt-6 rounded-xl border border-white/10 bg-white/5 p-3 text-center text-[11px] text-white/50">
-          Demo player:{' '}
+          {t('authPage.demoPlayer')}{' '}
           <button
             type="button"
             onClick={() => {

@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowRight, Lock, Mail, User } from 'lucide-react';
+import { ArrowLeft, Lock, Mail, User } from 'lucide-react';
 import { useAuth } from '@/store/auth';
 import { useUi } from '@/store/ui';
 import { Logo } from '@/components/ui/logo';
+import { t } from '@/i18n';
 
 export function SignupForm() {
   const router = useRouter();
@@ -34,12 +35,12 @@ export function SignupForm() {
         body: JSON.stringify({ email, username, password, referralCode }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Signup failed');
+      if (!res.ok) throw new Error(data.error || t('authPage.signUpFailed'));
       setUser(data.user);
-      showToast({ title: `Welcome to RYZE, ${data.user.username}`, tone: 'success' });
+      showToast({ title: `${t('authPage.welcomeToRyze')}، ${data.user.username}`, tone: 'success' });
       router.push('/account');
     } catch (err) {
-      showToast({ title: 'Signup failed', description: err instanceof Error ? err.message : '', tone: 'error' });
+      showToast({ title: t('authPage.signUpFailed'), description: err instanceof Error ? err.message : '', tone: 'error' });
     } finally {
       setSubmitting(false);
     }
@@ -50,42 +51,42 @@ export function SignupForm() {
       <div className="glass-card w-full max-w-md p-8">
         <div className="mb-6 flex flex-col items-center text-center">
           <Logo size="lg" href={null} />
-          <h1 className="mt-4 font-display text-3xl font-black">Join the rise</h1>
-          <p className="mt-1 text-sm text-white/60">Create your RYZE player account.</p>
+          <h1 className="mt-4 font-display text-3xl font-black">{t('authPage.joinTheRise')}</h1>
+          <p className="mt-1 text-sm text-white/60">{t('authPage.createYourAccount')}</p>
         </div>
         <form onSubmit={submit} className="space-y-4">
           <div>
-            <label className="label" htmlFor="username">Player tag</label>
+            <label className="label" htmlFor="username">{t('authPage.playerTag')}</label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+              <User className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
               <input
                 id="username"
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="input pl-9"
+                className="input ps-9"
                 placeholder="phantom_22"
               />
             </div>
           </div>
           <div>
-            <label className="label" htmlFor="email">Email</label>
+            <label className="label" htmlFor="email">{t('authPage.email')}</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+              <Mail className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
               <input
                 id="email"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input pl-9"
+                className="input ps-9"
               />
             </div>
           </div>
           <div>
-            <label className="label" htmlFor="password">Password</label>
+            <label className="label" htmlFor="password">{t('authPage.password')}</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+              <Lock className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
               <input
                 id="password"
                 type="password"
@@ -93,13 +94,13 @@ export function SignupForm() {
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input pl-9"
-                placeholder="At least 8 characters"
+                className="input ps-9"
+                placeholder={t('authPage.atLeast8Chars')}
               />
             </div>
           </div>
           <div>
-            <label className="label" htmlFor="ref">Referral code (optional)</label>
+            <label className="label" htmlFor="ref">{t('authPage.referralCodeOptional')}</label>
             <input
               id="ref"
               value={referralCode}
@@ -109,16 +110,16 @@ export function SignupForm() {
             />
           </div>
           <button type="submit" disabled={submitting} className="btn-primary w-full justify-center">
-            {submitting ? 'Creating…' : (
+            {submitting ? t('authPage.creating') : (
               <>
-                Create account <ArrowRight className="h-4 w-4" />
+                {t('authPage.createAccountBtn')} <ArrowLeft className="h-4 w-4" />
               </>
             )}
           </button>
         </form>
         <p className="mt-4 text-center text-xs text-white/50">
-          Already have an account?{' '}
-          <Link href="/auth/login" className="text-neon-blue hover:underline">Sign in</Link>
+          {t('authPage.alreadyHaveAccount')}{' '}
+          <Link href="/auth/login" className="text-neon-blue hover:underline">{t('authPage.signIn')}</Link>
         </p>
       </div>
     </div>

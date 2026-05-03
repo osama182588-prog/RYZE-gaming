@@ -78,7 +78,7 @@ export async function createUser(input: {
 }): Promise<User> {
   const email = input.email.toLowerCase().trim();
   if (store.usersByEmail.has(email)) {
-    throw new Error('An account with that email already exists.');
+    throw new Error('يوجد بالفعل حساب بهذا البريد الإلكتروني.');
   }
   const passwordHash = await bcrypt.hash(input.password, 10);
   const user: User = {

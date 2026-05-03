@@ -2,11 +2,12 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import { Minus, Plus, ShoppingBag, Trash2, X, ArrowRight, Tag } from 'lucide-react';
+import { Minus, Plus, ShoppingBag, Trash2, X, ArrowLeft, Tag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useCart } from '@/store/cart';
 import { useUi } from '@/store/ui';
 import { formatPrice } from '@/lib/utils';
+import { t } from '@/i18n';
 
 export function CartDrawer() {
   const isOpen = useCart((s) => s.isOpen);
@@ -43,14 +44,14 @@ export function CartDrawer() {
         body: JSON.stringify({ code, subtotal }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Invalid code');
+      if (!res.ok) throw new Error(data.error || t('errors.invalidCode'));
       applyCoupon(data.coupon);
-      showToast({ title: `Code ${data.coupon.code} applied`, description: data.coupon.description, tone: 'success' });
+      showToast({ title: `${t('cart.codeApplied')} ${data.coupon.code}`, description: data.coupon.description, tone: 'success' });
       setCode('');
     } catch (err) {
       showToast({
-        title: 'Could not apply code',
-        description: err instanceof Error ? err.message : 'Try again',
+        title: t('cart.couldNotApply'),
+        description: err instanceof Error ? err.message : t('errors.tryAgain'),
         tone: 'error',
       });
     } finally {
@@ -71,24 +72,24 @@ export function CartDrawer() {
             aria-hidden
           />
           <motion.aside
-            initial={{ x: '100%' }}
+            initial={{ x: '-100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            exit={{ x: '-100%' }}
             transition={{ type: 'spring', stiffness: 240, damping: 28 }}
-            className="fixed right-0 top-0 z-[61] flex h-full w-full max-w-md flex-col border-l border-white/10 bg-void-900/95 shadow-[-30px_0_80px_-20px_rgba(0,0,0,0.7)] backdrop-blur-xl"
+            className="fixed start-0 top-0 z-[61] flex h-full w-full max-w-md flex-col border-e border-white/10 bg-void-900/95 shadow-[30px_0_80px_-20px_rgba(0,0,0,0.7)] backdrop-blur-xl"
             role="dialog"
-            aria-label="Cart"
+            aria-label={t('nav.cart')}
           >
             <header className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <div className="flex items-center gap-2">
                 <ShoppingBag className="h-5 w-5 text-neon-purple" />
-                <h2 className="font-display text-lg font-bold">Your Loadout</h2>
+                <h2 className="font-display text-lg font-bold">{t('cart.yourLoadout')}</h2>
               </div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
                 className="btn-icon"
-                aria-label="Close cart"
+                aria-label={t('common.close')}
               >
                 <X className="h-4 w-4" />
               </button>
@@ -98,14 +99,14 @@ export function CartDrawer() {
               {items.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
                   <ShoppingBag className="h-12 w-12 text-white/20" />
-                  <p className="font-display text-xl">Loadout is empty</p>
-                  <p className="text-sm text-white/50">Equip your kit. The arsenal awaits.</p>
+                  <p className="font-display text-xl">{t('cart.empty')}</p>
+                  <p className="text-sm text-white/50">{t('cart.emptyMessage')}</p>
                   <Link
                     href="/shop"
                     onClick={() => setOpen(false)}
                     className="btn-primary mt-3"
                   >
-                    Browse Gear <ArrowRight className="h-4 w-4" />
+                    {t('cart.browseGear')} <ArrowLeft className="h-4 w-4" />
                   </Link>
                 </div>
               ) : (
@@ -137,7 +138,7 @@ export function CartDrawer() {
                           <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5">
                             <button
                               type="button"
-                              aria-label="Decrease quantity"
+                              aria-label={t('cart.decreaseQty')}
                               onClick={() =>
                                 updateQty(item.productId, item.variantIds, item.quantity - 1)
                               }
@@ -150,7 +151,7 @@ export function CartDrawer() {
                             </span>
                             <button
                               type="button"
-                              aria-label="Increase quantity"
+                              aria-label={t('cart.increaseQty')}
                               onClick={() =>
                                 updateQty(item.productId, item.variantIds, item.quantity + 1)
                               }
@@ -168,7 +169,7 @@ export function CartDrawer() {
                         type="button"
                         onClick={() => removeItem(item.productId, item.variantIds)}
                         className="text-white/40 hover:text-neon-pink"
-                        aria-label="Remove item"
+                        aria-label={t('cart.removeItem')}
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -182,35 +183,35 @@ export function CartDrawer() {
               <footer className="border-t border-white/10 px-5 py-4">
                 <form onSubmit={applyCode} className="mb-3 flex items-center gap-2">
                   <div className="relative flex-1">
-                    <Tag className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/40" />
+                    <Tag className="absolute start-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/40" />
                     <input
                       value={code}
                       onChange={(e) => setCode(e.target.value)}
-                      placeholder={coupon?.code ?? 'Promo code'}
-                      className="input pl-9"
+                      placeholder={coupon?.code ?? t('cart.promoCode')}
+                      className="input ps-9"
                     />
                   </div>
                   <button
                     type="submit"
                     disabled={applying}
-                    className="rounded-full border border-white/15 bg-white/5 px-4 py-3 text-xs font-bold uppercase tracking-wider hover:border-neon-purple hover:text-white"
+                    className="rounded-full border border-white/15 bg-white/5 px-4 py-3 text-xs font-bold hover:border-neon-purple hover:text-white"
                   >
-                    Apply
+                    {t('cart.apply')}
                   </button>
                 </form>
 
                 <div className="flex items-center justify-between text-sm text-white/60">
-                  <span>Subtotal</span>
+                  <span>{t('cart.subtotal')}</span>
                   <span className="font-mono text-white">{formatPrice(subtotal)}</span>
                 </div>
                 {discount > 0 && (
                   <div className="mt-1 flex items-center justify-between text-sm text-neon-green">
-                    <span>Discount{coupon ? ` (${coupon.code})` : ''}</span>
+                    <span>{t('cart.discount')}{coupon ? ` (${coupon.code})` : ''}</span>
                     <span className="font-mono">-{formatPrice(discount)}</span>
                   </div>
                 )}
                 <div className="mt-2 flex items-center justify-between">
-                  <span className="font-display text-lg">Total</span>
+                  <span className="font-display text-lg">{t('cart.total')}</span>
                   <span className="font-display text-2xl font-black neon-text-static">
                     {formatPrice(total)}
                   </span>
@@ -220,14 +221,14 @@ export function CartDrawer() {
                   onClick={() => setOpen(false)}
                   className="btn-primary mt-4 w-full justify-center"
                 >
-                  Checkout <ArrowRight className="h-4 w-4" />
+                  {t('checkout.title')} <ArrowLeft className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/cart"
                   onClick={() => setOpen(false)}
                   className="mt-2 block text-center text-xs text-white/50 hover:text-white"
                 >
-                  View full cart →
+                  {t('cart.viewFullCart')} ←
                 </Link>
               </footer>
             )}

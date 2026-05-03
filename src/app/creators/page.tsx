@@ -3,21 +3,21 @@ import Link from 'next/link';
 import { CREATORS } from '@/data/community';
 import { getProduct } from '@/data/products';
 import { TiltCard } from '@/components/ui/tilt-card';
+import { t } from '@/i18n';
 
 export const metadata: Metadata = {
-  title: 'Creators',
-  description: 'Pros, streamers and creators who run RYZE on every stage.',
+  title: 'المبدعون | RYZE',
+  description: 'المحترفون والبثّاث والمبدعون الذين يعتمدون على RYZE في كل ساحة.',
 };
 
 export default function CreatorsPage() {
   return (
     <div className="ryze-container py-12">
       <div className="mb-12">
-        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neon-pink">Squad RYZE</p>
-        <h1 className="mt-3 font-display text-4xl font-black sm:text-6xl">Backed by the elite.</h1>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neon-pink">{t('creatorsPage.eyebrow')}</p>
+        <h1 className="mt-3 font-display text-4xl font-black sm:text-6xl">{t('creatorsPage.title')}</h1>
         <p className="mt-3 max-w-2xl text-white/60">
-          Pro players, streamers and creators across every continent — running RYZE because nothing else
-          keeps up.
+          {t('creatorsPage.subtitle')}
         </p>
       </div>
 
@@ -57,7 +57,7 @@ export default function CreatorsPage() {
                       <img src={sig.images[0]} alt="" className="h-12 w-12 rounded-lg object-cover" />
                       <div className="flex-1">
                         <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">
-                          Signature gear
+                          {t('creatorsPage.signatureGear')}
                         </p>
                         <p className="text-sm font-semibold">{sig.name}</p>
                       </div>

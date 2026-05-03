@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpLeft } from 'lucide-react';
 import { CREATORS } from '@/data/community';
 import { Reveal, RevealItem, RevealList } from '@/components/ui/reveal';
 import { SectionHeading } from '@/components/ui/section-heading';
+import { t } from '@/i18n';
 
 export function CreatorsSection() {
   return (
@@ -12,14 +13,14 @@ export function CreatorsSection() {
       <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
         <Reveal>
           <SectionHeading
-            eyebrow="Squad RYZE"
-            title="Backed by the world's elite."
-            subtitle="Pro players, streamers and creators who run RYZE on every stage."
+            eyebrow={t('creators.eyebrow')}
+            title={t('creators.title')}
+            subtitle={t('creators.subtitle')}
           />
         </Reveal>
         <Reveal delay={0.1}>
           <Link href="/creators" className="group inline-flex items-center gap-2 text-sm font-semibold text-white/70 hover:text-white">
-            Meet the squad <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            {t('creators.meetSquad')} <ArrowUpLeft className="h-4 w-4 transition group-hover:translate-y-0.5 group-hover:-translate-x-0.5" />
           </Link>
         </Reveal>
       </div>
@@ -49,10 +50,10 @@ export function CreatorsSection() {
                 />
                 <p className="mt-3 font-display text-base font-bold">{c.name}</p>
                 <p className="text-xs text-white/50">{c.handle}</p>
-                <p className="mt-2 text-[10px] font-bold uppercase tracking-widest text-neon-blue">
+                <p className="mt-2 text-[10px] font-bold text-neon-blue">
                   {c.game}
                 </p>
-                <p className="mt-1 text-xs text-white/60">{c.followers} followers</p>
+                <p className="mt-1 text-xs text-white/60">{c.followers} {t('creators.followers')}</p>
               </div>
             </Link>
           </RevealItem>

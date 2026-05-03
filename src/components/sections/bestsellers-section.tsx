@@ -5,7 +5,8 @@ import { getBestSellers } from '@/data/products';
 import { ProductCard } from '@/components/product/product-card';
 import { Reveal } from '@/components/ui/reveal';
 import { SectionHeading } from '@/components/ui/section-heading';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpLeft } from 'lucide-react';
+import { t } from '@/i18n';
 
 export function BestSellersSection() {
   const products = getBestSellers(8);
@@ -14,14 +15,14 @@ export function BestSellersSection() {
       <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
         <Reveal>
           <SectionHeading
-            eyebrow="Most Wanted"
-            title="Top of the leaderboard."
-            subtitle="Battle-tested gear chosen by thousands of competitive players."
+            eyebrow={t('bestsellers.eyebrow')}
+            title={t('bestsellers.title')}
+            subtitle={t('bestsellers.subtitle')}
           />
         </Reveal>
         <Reveal delay={0.1}>
           <Link href="/shop" className="group inline-flex items-center gap-2 text-sm font-semibold text-white/70 hover:text-white">
-            See everything <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            {t('bestsellers.seeAll')} <ArrowUpLeft className="h-4 w-4 transition group-hover:translate-y-0.5 group-hover:-translate-x-0.5" />
           </Link>
         </Reveal>
       </div>

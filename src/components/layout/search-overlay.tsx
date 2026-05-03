@@ -3,11 +3,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Search, X, ArrowRight } from 'lucide-react';
+import { Search, X, ArrowLeft } from 'lucide-react';
 import { useUi } from '@/store/ui';
 import { searchSuggestions } from '@/data/products';
 import { CATEGORIES } from '@/data/categories';
 import { formatPrice } from '@/lib/utils';
+import { t } from '@/i18n';
 
 export function SearchOverlay() {
   const setOpen = useUi((s) => s.setSearchOpen);
@@ -24,7 +25,7 @@ export function SearchOverlay() {
   }, [setOpen]);
 
   const results = useMemo(() => searchSuggestions(q, 8), [q]);
-  const trending = ['mousepad', 'hoodie', 'rgb', 'headset', 'desk'];
+  const trending = ['مفرش فأرة', 'هودي', 'RGB', 'سماعات', 'مكتب'];
 
   return (
     <motion.div
@@ -47,23 +48,23 @@ export function SearchOverlay() {
               ref={ref}
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search gear, drops, categories…"
+              placeholder={t('search.placeholder')}
               className="flex-1 bg-transparent text-lg text-white placeholder:text-white/30 focus:outline-none"
             />
             <button
               type="button"
               onClick={() => setOpen(false)}
               className="btn-icon"
-              aria-label="Close search"
+              aria-label={t('search.close')}
             >
               <X className="h-4 w-4" />
             </button>
           </div>
 
           <div className="grid grid-cols-1 gap-0 md:grid-cols-3">
-            <div className="border-b border-white/5 p-5 md:border-b-0 md:border-r">
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-white/50">
-                Categories
+            <div className="border-b border-white/5 p-5 md:border-b-0 md:border-s">
+              <p className="mb-3 text-[10px] font-bold text-white/50">
+                {t('search.categories')}
               </p>
               <ul className="flex flex-col gap-1">
                 {CATEGORIES.map((c) => (
@@ -74,7 +75,7 @@ export function SearchOverlay() {
                       className="group flex items-center justify-between rounded-lg px-2 py-2 text-sm text-white/80 hover:bg-white/5 hover:text-white"
                     >
                       <span>{c.name}</span>
-                      <ArrowRight className="h-3.5 w-3.5 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100" />
+                      <ArrowLeft className="h-3.5 w-3.5 opacity-0 transition group-hover:-translate-x-1 group-hover:opacity-100" />
                     </Link>
                   </li>
                 ))}
@@ -84,24 +85,24 @@ export function SearchOverlay() {
             <div className="md:col-span-2 p-5">
               {q.trim() === '' ? (
                 <>
-                  <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-white/50">
-                    Trending
+                  <p className="mb-3 text-[10px] font-bold text-white/50">
+                    {t('search.trending')}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {trending.map((t) => (
+                    {trending.map((item) => (
                       <button
-                        key={t}
+                        key={item}
                         type="button"
-                        onClick={() => setQ(t)}
+                        onClick={() => setQ(item)}
                         className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/80 hover:border-neon-purple hover:text-white"
                       >
-                        {t}
+                        {item}
                       </button>
                     ))}
                   </div>
                 </>
               ) : results.length === 0 ? (
-                <p className="text-sm text-white/50">No matches. Try another keyword.</p>
+                <p className="text-sm text-white/50">{t('search.noMatches')}</p>
               ) : (
                 <ul className="flex flex-col gap-1">
                   {results.map((p) => (

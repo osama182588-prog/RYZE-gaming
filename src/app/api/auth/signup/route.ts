@@ -5,8 +5,8 @@ import { setSessionCookie, signSession } from '@/lib/auth';
 
 const Schema = z.object({
   email: z.string().email(),
-  username: z.string().min(2).max(24).regex(/^[a-zA-Z0-9_-]+$/, 'Use letters, numbers, _ or -'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  username: z.string().min(2).max(24).regex(/^[a-zA-Z0-9_-]+$/, 'استخدم الأحرف والأرقام و _ أو - فقط'),
+  password: z.string().min(8, 'يجب أن تتكوّن كلمة المرور من ٨ خانات على الأقل'),
   referralCode: z.string().optional(),
 });
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const parsed = Schema.safeParse(body);
   if (!parsed.success) {
-    const first = parsed.error.issues[0]?.message ?? 'Invalid input';
+    const first = parsed.error.issues[0]?.message ?? 'إدخال غير صالح';
     return NextResponse.json({ error: first }, { status: 400 });
   }
   try {
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Signup failed' },
+      { error: err instanceof Error ? err.message : 'فشل إنشاء الحساب' },
       { status: 400 },
     );
   }

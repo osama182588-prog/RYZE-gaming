@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   const user = await getCurrentUser();
   if (!user || user.role !== 'admin') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
   }
   const [orders, users, subs] = await Promise.all([listOrders(), listUsers(), newsletterSize()]);
   const revenue = orders.reduce((s, o) => s + o.total, 0);

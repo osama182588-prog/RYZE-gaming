@@ -2,6 +2,7 @@
 
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { t } from '@/i18n';
 
 export function Stars({
   value,
@@ -14,7 +15,7 @@ export function Stars({
 }) {
   const filled = Math.round(value);
   return (
-    <span className={cn('inline-flex items-center gap-0.5', className)} aria-label={`${value} out of 5`}>
+    <span className={cn('inline-flex items-center gap-0.5', className)} aria-label={`${value} ${t('stars.outOf5')}`}>
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}

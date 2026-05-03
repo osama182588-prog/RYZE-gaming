@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const parsed = Schema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ error: 'Invalid order payload.' }, { status: 400 });
+    return NextResponse.json({ error: 'بيانات الطلب غير صحيحة.' }, { status: 400 });
   }
   const user = await getCurrentUser();
   const userEmail = user?.email ?? parsed.data.shippingAddress.email;

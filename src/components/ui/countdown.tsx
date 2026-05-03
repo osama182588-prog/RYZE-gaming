@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { t } from '@/i18n';
 
 interface CountdownProps {
   to: string | Date;
@@ -19,13 +20,13 @@ function calc(to: Date) {
 
 export function Countdown({ to, onEnd, compact }: CountdownProps) {
   const target = typeof to === 'string' ? new Date(to) : to;
-  const [t, setT] = useState(() => calc(target));
+  const [time, setTime] = useState(() => calc(target));
 
   useEffect(() => {
-    setT(calc(target));
+    setTime(calc(target));
     const i = setInterval(() => {
       const next = calc(target);
-      setT(next);
+      setTime(next);
       if (next.done) {
         clearInterval(i);
         onEnd?.();
@@ -40,7 +41,7 @@ export function Countdown({ to, onEnd, compact }: CountdownProps) {
   if (compact) {
     return (
       <span className="font-mono text-sm tabular-nums text-white/90">
-        {pad(t.d)}:{pad(t.h)}:{pad(t.m)}:{pad(t.s)}
+        {pad(time.d)}:{pad(time.h)}:{pad(time.m)}:{pad(time.s)}
       </span>
     );
   }
@@ -48,10 +49,10 @@ export function Countdown({ to, onEnd, compact }: CountdownProps) {
   return (
     <div className="flex items-center gap-2 sm:gap-3">
       {[
-        { v: t.d, label: 'Days' },
-        { v: t.h, label: 'Hrs' },
-        { v: t.m, label: 'Min' },
-        { v: t.s, label: 'Sec' },
+        { v: time.d, label: t('countdown.days') },
+        { v: time.h, label: t('countdown.hours') },
+        { v: time.m, label: t('countdown.minutes') },
+        { v: time.s, label: t('countdown.seconds') },
       ].map((u, i) => (
         <div
           key={u.label}

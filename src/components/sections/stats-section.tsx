@@ -3,12 +3,13 @@
 import { Users, ShoppingBag, Zap, Globe } from 'lucide-react';
 import { AnimatedCounter } from '@/components/ui/animated-counter';
 import { Reveal } from '@/components/ui/reveal';
+import { t } from '@/i18n';
 
 const STATS = [
-  { Icon: Users, value: 184320, suffix: '+', label: 'Active Players' },
-  { Icon: ShoppingBag, value: 612000, suffix: '+', label: 'Units Shipped' },
-  { Icon: Zap, value: 38, label: 'Limited Drops' },
-  { Icon: Globe, value: 64, label: 'Countries' },
+  { Icon: Users, value: 184320, suffix: '+', label: t('stats.activePlayers') },
+  { Icon: ShoppingBag, value: 612000, suffix: '+', label: t('stats.unitsShipped') },
+  { Icon: Zap, value: 38, label: t('stats.limitedDrops') },
+  { Icon: Globe, value: 64, label: t('stats.countries') },
 ];
 
 export function StatsSection() {
@@ -34,7 +35,7 @@ export function StatsSection() {
                 <p className="font-display text-3xl font-black neon-text-static sm:text-4xl">
                   <AnimatedCounter value={value} suffix={suffix ?? ''} />
                 </p>
-                <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/50">
+                <p className="mt-1 text-[10px] font-bold text-white/50">
                   {label}
                 </p>
               </div>

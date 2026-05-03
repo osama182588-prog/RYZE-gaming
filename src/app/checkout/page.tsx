@@ -9,9 +9,16 @@ import { useCart } from '@/store/cart';
 import { useAuth } from '@/store/auth';
 import { useUi } from '@/store/ui';
 import { cn, formatPrice } from '@/lib/utils';
+import { t } from '@/i18n';
 
 const STEPS = ['shipping', 'payment', 'review'] as const;
 type Step = (typeof STEPS)[number];
+
+const STEP_LABELS: Record<Step, string> = {
+  shipping: 'الشحن',
+  payment: 'الدفع',
+  review: 'مراجعة',
+};
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -39,7 +46,7 @@ export default function CheckoutPage() {
     city: '',
     region: '',
     postal: '',
-    country: 'US',
+    country: 'SA',
     cardName: '',
     cardNumber: '',
     cardExp: '',
@@ -99,14 +106,14 @@ export default function CheckoutPage() {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Could not place order');
+      if (!res.ok) throw new Error(data.error || t('checkoutPage.couldNotPlace'));
       setDone({ id: data.order.id, total: data.order.total });
       clear();
-      showToast({ title: 'Order confirmed', description: data.order.id, tone: 'success' });
+      showToast({ title: t('checkoutPage.orderConfirmed'), description: data.order.id, tone: 'success' });
     } catch (err) {
       showToast({
-        title: 'Order failed',
-        description: err instanceof Error ? err.message : 'Try again.',
+        title: t('checkoutPage.orderFailed'),
+        description: err instanceof Error ? err.message : t('checkoutPage.tryAgain'),
         tone: 'error',
       });
     } finally {
@@ -125,20 +132,20 @@ export default function CheckoutPage() {
           <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-neon-green/15 text-neon-green shadow-neon-purple">
             <Check className="h-8 w-8" />
           </div>
-          <h1 className="font-display text-3xl font-black">Order Confirmed</h1>
+          <h1 className="font-display text-3xl font-black">{t('checkoutPage.orderConfirmedTitle')}</h1>
           <p className="mt-2 text-white/60">
-            Order <span className="font-mono text-white">{done.id}</span> · Total{' '}
+            {t('checkoutPage.orderLabel')} <span className="font-mono text-white">{done.id}</span> · {t('checkoutPage.totalLabel')}{' '}
             <span className="font-mono text-white">{formatPrice(done.total)}</span>
           </p>
           <p className="mt-4 text-sm text-white/60">
-            Your gear is being prepped for the warp drive. Confirmation sent to {form.email}.
+            {t('checkoutPage.gearPrepping')} {form.email}.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link href="/account" className="btn-primary">
-              View account
+              {t('checkoutPage.viewAccount')}
             </Link>
             <Link href="/shop" className="btn-ghost">
-              Keep shopping
+              {t('checkoutPage.keepShopping')}
             </Link>
           </div>
         </motion.div>
@@ -150,7 +157,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="ryze-container py-12">
-      <h1 className="mb-8 font-display text-4xl font-black sm:text-5xl">Checkout</h1>
+      <h1 className="mb-8 font-display text-4xl font-black sm:text-5xl">{t('checkoutPage.title')}</h1>
 
       {/* Stepper */}
       <ol className="mb-10 flex flex-wrap items-center gap-3">
@@ -168,9 +175,9 @@ export default function CheckoutPage() {
                   : 'border-white/10 text-white/40',
               )}
             >
-              <span className="font-mono">{i + 1}.</span> {s}
+              <span className="font-mono">{i + 1}.</span> {STEP_LABELS[s]}
             </button>
-            {i < STEPS.length - 1 && <span className="text-white/20">→</span>}
+            {i < STEPS.length - 1 && <span className="text-white/20">←</span>}
           </li>
         ))}
       </ol>
@@ -181,29 +188,29 @@ export default function CheckoutPage() {
             {step === 'shipping' && (
               <motion.section
                 key="shipping"
-                initial={{ opacity: 0, x: 12 }}
+                initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -12 }}
+                exit={{ opacity: 0, x: 12 }}
                 transition={{ duration: 0.25 }}
               >
                 <div className="mb-6 flex items-center gap-2">
                   <Truck className="h-5 w-5 text-neon-blue" />
-                  <h2 className="font-display text-xl font-bold">Shipping address</h2>
+                  <h2 className="font-display text-xl font-bold">{t('checkoutPage.shippingAddress')}</h2>
                 </div>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <Field label="Full name" value={form.fullName} onChange={(v) => set('fullName', v)} />
-                  <Field label="Email" type="email" value={form.email} onChange={(v) => set('email', v)} />
-                  <Field label="Phone" value={form.phone} onChange={(v) => set('phone', v)} />
-                  <Field label="Country" value={form.country} onChange={(v) => set('country', v)} />
+                  <Field label={t('checkoutPage.fullName')} value={form.fullName} onChange={(v) => set('fullName', v)} />
+                  <Field label={t('checkoutPage.emailLabel')} type="email" value={form.email} onChange={(v) => set('email', v)} />
+                  <Field label={t('checkoutPage.phone')} value={form.phone} onChange={(v) => set('phone', v)} />
+                  <Field label={t('checkoutPage.country')} value={form.country} onChange={(v) => set('country', v)} />
                   <div className="sm:col-span-2">
-                    <Field label="Address line 1" value={form.line1} onChange={(v) => set('line1', v)} />
+                    <Field label={t('checkoutPage.addressLine1')} value={form.line1} onChange={(v) => set('line1', v)} />
                   </div>
                   <div className="sm:col-span-2">
-                    <Field label="Address line 2" value={form.line2} onChange={(v) => set('line2', v)} />
+                    <Field label={t('checkoutPage.addressLine2')} value={form.line2} onChange={(v) => set('line2', v)} />
                   </div>
-                  <Field label="City" value={form.city} onChange={(v) => set('city', v)} />
-                  <Field label="Region / State" value={form.region} onChange={(v) => set('region', v)} />
-                  <Field label="Postal code" value={form.postal} onChange={(v) => set('postal', v)} />
+                  <Field label={t('checkoutPage.city')} value={form.city} onChange={(v) => set('city', v)} />
+                  <Field label={t('checkoutPage.region')} value={form.region} onChange={(v) => set('region', v)} />
+                  <Field label={t('checkoutPage.postalCode')} value={form.postal} onChange={(v) => set('postal', v)} />
                 </div>
                 <div className="mt-6 flex justify-end">
                   <button
@@ -212,7 +219,7 @@ export default function CheckoutPage() {
                     disabled={!form.fullName || !form.email || !form.line1 || !form.city || !form.postal}
                     className="btn-primary disabled:opacity-50"
                   >
-                    Continue to payment
+                    {t('checkoutPage.continueToPayment')}
                   </button>
                 </div>
               </motion.section>
@@ -221,38 +228,38 @@ export default function CheckoutPage() {
             {step === 'payment' && (
               <motion.section
                 key="payment"
-                initial={{ opacity: 0, x: 12 }}
+                initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -12 }}
+                exit={{ opacity: 0, x: 12 }}
                 transition={{ duration: 0.25 }}
               >
                 <div className="mb-6 flex items-center gap-2">
                   <CreditCard className="h-5 w-5 text-neon-blue" />
-                  <h2 className="font-display text-xl font-bold">Payment</h2>
+                  <h2 className="font-display text-xl font-bold">{t('checkoutPage.payment')}</h2>
                 </div>
                 <p className="mb-4 inline-flex items-center gap-1 text-xs text-white/50">
-                  <Lock className="h-3 w-3" /> Demo checkout — no real card data is processed.
+                  <Lock className="h-3 w-3" /> {t('checkoutPage.demoCheckout')}
                 </p>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="sm:col-span-2">
-                    <Field label="Name on card" value={form.cardName} onChange={(v) => set('cardName', v)} />
+                    <Field label={t('checkoutPage.nameOnCard')} value={form.cardName} onChange={(v) => set('cardName', v)} />
                   </div>
                   <div className="sm:col-span-2">
                     <Field
-                      label="Card number"
+                      label={t('checkoutPage.cardNumber')}
                       value={form.cardNumber}
                       onChange={(v) => set('cardNumber', v.replace(/[^0-9 ]/g, '').slice(0, 19))}
                       placeholder="4242 4242 4242 4242"
                     />
                   </div>
                   <Field
-                    label="Expiry (MM/YY)"
+                    label={t('checkoutPage.expiry')}
                     value={form.cardExp}
                     onChange={(v) => set('cardExp', v.replace(/[^0-9/]/g, '').slice(0, 5))}
                     placeholder="12/29"
                   />
                   <Field
-                    label="CVC"
+                    label={t('checkoutPage.cvc')}
                     value={form.cardCvc}
                     onChange={(v) => set('cardCvc', v.replace(/[^0-9]/g, '').slice(0, 4))}
                     placeholder="123"
@@ -260,7 +267,7 @@ export default function CheckoutPage() {
                 </div>
                 <div className="mt-6 flex items-center justify-between">
                   <button type="button" onClick={() => setStep('shipping')} className="text-sm text-white/60 hover:text-white">
-                    ← Back
+                    {t('checkoutPage.back')} →
                   </button>
                   <button
                     type="button"
@@ -268,7 +275,7 @@ export default function CheckoutPage() {
                     disabled={!form.cardName || !form.cardNumber || !form.cardExp || !form.cardCvc}
                     className="btn-primary disabled:opacity-50"
                   >
-                    Review order
+                    {t('checkoutPage.reviewOrder')}
                   </button>
                 </div>
               </motion.section>
@@ -277,27 +284,27 @@ export default function CheckoutPage() {
             {step === 'review' && (
               <motion.section
                 key="review"
-                initial={{ opacity: 0, x: 12 }}
+                initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -12 }}
+                exit={{ opacity: 0, x: 12 }}
                 transition={{ duration: 0.25 }}
               >
                 <div className="mb-6 flex items-center gap-2">
                   <Package className="h-5 w-5 text-neon-blue" />
-                  <h2 className="font-display text-xl font-bold">Review & place order</h2>
+                  <h2 className="font-display text-xl font-bold">{t('checkoutPage.reviewAndPlace')}</h2>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <ReviewBlock title="Ship to">
+                  <ReviewBlock title={t('checkoutPage.shipTo')}>
                     <p>{form.fullName}</p>
                     <p>{form.line1} {form.line2}</p>
-                    <p>{form.city}, {form.region} {form.postal}</p>
+                    <p>{form.city}، {form.region} {form.postal}</p>
                     <p>{form.country}</p>
                     <p className="text-white/50">{form.email}</p>
                   </ReviewBlock>
-                  <ReviewBlock title="Pay with">
+                  <ReviewBlock title={t('checkoutPage.payWith')}>
                     <p>{form.cardName}</p>
                     <p className="font-mono">**** **** **** {form.cardNumber.slice(-4)}</p>
-                    <p className="text-white/50">Exp {form.cardExp}</p>
+                    <p className="text-white/50">{t('checkoutPage.exp')} {form.cardExp}</p>
                   </ReviewBlock>
                 </div>
                 <div className="mt-6 space-y-2">
@@ -313,7 +320,7 @@ export default function CheckoutPage() {
                 </div>
                 <div className="mt-6 flex items-center justify-between">
                   <button type="button" onClick={() => setStep('payment')} className="text-sm text-white/60 hover:text-white">
-                    ← Back
+                    {t('checkoutPage.back')} →
                   </button>
                   <button
                     type="button"
@@ -321,9 +328,9 @@ export default function CheckoutPage() {
                     disabled={submitting}
                     className="btn-primary disabled:opacity-50"
                   >
-                    {submitting ? 'Processing…' : (
+                    {submitting ? t('checkoutPage.processing') : (
                       <>
-                        <Lock className="h-4 w-4" /> Place order — {formatPrice(total)}
+                        <Lock className="h-4 w-4" /> {t('checkoutPage.placeOrder')} — {formatPrice(total)}
                       </>
                     )}
                   </button>
@@ -335,31 +342,31 @@ export default function CheckoutPage() {
 
         <aside className="lg:sticky lg:top-28 lg:h-fit">
           <div className="glass-card p-5">
-            <p className="font-display text-lg font-bold">Summary</p>
+            <p className="font-display text-lg font-bold">{t('checkoutPage.summary')}</p>
             <ul className="mt-4 space-y-3">
               {items.map((i) => (
                 <li key={`${i.productId}::${i.variantIds.join(',')}`} className="flex items-center gap-3">
                   <img src={i.image} alt="" className="h-12 w-12 rounded-lg object-cover" />
                   <div className="flex-1">
                     <p className="line-clamp-1 text-sm font-semibold">{i.name}</p>
-                    <p className="text-xs text-white/40">Qty {i.quantity}</p>
+                    <p className="text-xs text-white/40">{t('checkoutPage.qty')} {i.quantity}</p>
                   </div>
                   <span className="font-mono text-sm">{formatPrice(i.price * i.quantity)}</span>
                 </li>
               ))}
             </ul>
             <dl className="mt-5 space-y-2 border-t border-white/10 pt-4 text-sm">
-              <div className="flex justify-between"><dt className="text-white/60">Subtotal</dt><dd className="font-mono">{formatPrice(subtotal)}</dd></div>
-              {discount > 0 && <div className="flex justify-between"><dt className="text-white/60">Discount</dt><dd className="font-mono text-neon-green">-{formatPrice(discount)}</dd></div>}
-              <div className="flex justify-between"><dt className="text-white/60">Shipping</dt><dd className="font-mono">{shipping === 0 ? 'Free' : formatPrice(shipping)}</dd></div>
-              <div className="flex justify-between"><dt className="text-white/60">Tax</dt><dd className="font-mono">{formatPrice(tax)}</dd></div>
+              <div className="flex justify-between"><dt className="text-white/60">{t('checkoutPage.subtotal')}</dt><dd className="font-mono">{formatPrice(subtotal)}</dd></div>
+              {discount > 0 && <div className="flex justify-between"><dt className="text-white/60">{t('checkoutPage.discount')}</dt><dd className="font-mono text-neon-green">-{formatPrice(discount)}</dd></div>}
+              <div className="flex justify-between"><dt className="text-white/60">{t('checkoutPage.shippingLabel')}</dt><dd className="font-mono">{shipping === 0 ? t('checkoutPage.free') : formatPrice(shipping)}</dd></div>
+              <div className="flex justify-between"><dt className="text-white/60">{t('checkoutPage.tax')}</dt><dd className="font-mono">{formatPrice(tax)}</dd></div>
             </dl>
             <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
-              <span className="font-display text-lg">Total</span>
+              <span className="font-display text-lg">{t('checkoutPage.total')}</span>
               <span className="font-display text-2xl font-black neon-text-static">{formatPrice(total)}</span>
             </div>
             <p className="mt-4 inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-white/40">
-              <ShieldCheck className="h-3 w-3 text-neon-green" /> Encrypted · 256-bit
+              <ShieldCheck className="h-3 w-3 text-neon-green" /> {t('checkoutPage.encrypted')}
             </p>
           </div>
         </aside>

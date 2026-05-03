@@ -30,9 +30,14 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['var(--font-orbitron)', 'system-ui', 'sans-serif'],
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-jetbrains)', 'ui-monospace', 'monospace'],
+        // Arabic-friendly fonts
+        cairo: ['var(--font-cairo)', 'system-ui', 'sans-serif'],
+        tajawal: ['var(--font-tajawal)', 'system-ui', 'sans-serif'],
+        ibmArabic: ['var(--font-ibm-arabic)', 'system-ui', 'sans-serif'],
+        // Aliases for existing CSS usage (now mapped to Arabic fonts)
+        display: ['var(--font-tajawal)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-cairo)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-ibm-arabic)', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
         'neon-purple': '0 0 30px rgba(155,92,255,0.45), 0 0 80px rgba(155,92,255,0.25)',
