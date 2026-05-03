@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useUi } from '@/store/ui';
 import { CheckCircle2, Info, XCircle, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { t } from '@/i18n';
 
 export function ToastHost() {
   const toast = useUi((s) => s.toast);
@@ -39,7 +40,7 @@ export function ToastHost() {
             <button
               type="button"
               onClick={dismiss}
-              aria-label="Dismiss notification"
+              aria-label={t('toast.dismiss')}
               className="text-white/50 hover:text-white"
             >
               <X className="h-4 w-4" />

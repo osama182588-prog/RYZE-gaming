@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getProduct, getRelatedProducts, PRODUCTS } from '@/data/products';
 import { ProductDetail } from './product-detail';
 import { ProductCard } from '@/components/product/product-card';
+import { t } from '@/i18n';
 
 export async function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }));
@@ -43,7 +44,7 @@ export default async function ProductPage({
 
       {related.length > 0 && (
         <section className="mt-24">
-          <h2 className="mb-8 font-display text-3xl font-black">Pair with</h2>
+          <h2 className="mb-8 font-display text-3xl font-black">{t('productDetail.pairWith')}</h2>
           <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-4">
             {related.map((p, i) => (
               <ProductCard key={p.id} product={p} index={i} />

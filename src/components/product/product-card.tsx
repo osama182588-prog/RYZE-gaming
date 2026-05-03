@@ -9,6 +9,7 @@ import { Stars } from '@/components/ui/stars';
 import { useCart } from '@/store/cart';
 import { useUi } from '@/store/ui';
 import { cn, formatPrice } from '@/lib/utils';
+import { t } from '@/i18n';
 
 interface ProductCardProps {
   product: Product;
@@ -31,6 +32,14 @@ const badgeClass = {
   'staff-pick': 'badge-staff',
 } as const;
 
+const badgeLabels: Record<string, string> = {
+  new: 'جديد',
+  limited: 'محدود',
+  bestseller: 'الأكثر مبيعًا',
+  pro: 'احترافي',
+  'staff-pick': 'اختيار الفريق',
+};
+
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const addItem = useCart((s) => s.addItem);
   const showToast = useUi((s) => s.showToast);
@@ -48,7 +57,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       variantIds: [],
     });
     showToast({
-      title: 'Loaded into cart',
+      title: t('productCard.loadedIntoCart'),
       description: product.name,
       tone: 'success',
     });
@@ -85,12 +94,12 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-void-950/90 via-void-950/10 to-transparent" />
 
             {/* Badges */}
-            <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+            <div className="absolute start-3 top-3 flex flex-wrap gap-1.5">
               {product.badges?.map((b) => {
                 const Icon = badgeIcons[b];
                 return (
                   <span key={b} className={cn(badgeClass[b])}>
-                    <Icon className="h-2.5 w-2.5" /> {b.replace('-', ' ')}
+                    <Icon className="h-2.5 w-2.5" /> {badgeLabels[b] || b.replace('-', ' ')}
                   </span>
                 );
               })}
@@ -111,7 +120,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 onClick={handleAdd}
                 className="flex flex-1 items-center justify-center gap-2 rounded-full bg-white/95 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-void hover:bg-white"
               >
-                <ShoppingCart className="h-3.5 w-3.5" /> Add
+                <ShoppingCart className="h-3.5 w-3.5" /> {t('productCard.add')}
               </button>
               <span
                 className="grid h-10 w-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur"

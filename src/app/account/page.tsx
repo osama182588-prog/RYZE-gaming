@@ -15,11 +15,13 @@ import {
   UserPlus,
   Zap,
   Copy,
+  ArrowLeft,
 } from 'lucide-react';
 import { useAuth } from '@/store/auth';
 import { ACHIEVEMENTS } from '@/data/community';
 import { useUi } from '@/store/ui';
 import { cn, formatPrice } from '@/lib/utils';
+import { t } from '@/i18n';
 import type { Order } from '@/types';
 
 const ICONS: Record<string, typeof Trophy> = {
@@ -82,14 +84,14 @@ export default function AccountPage() {
 
   if (loading || !user) {
     return (
-      <div className="ryze-container py-20 text-center text-white/50">Loading…</div>
+      <div className="ryze-container py-20 text-center text-white/50">{t('accountPage.loading')}</div>
     );
   }
 
   function copyReferral() {
     if (!user) return;
     navigator.clipboard.writeText(user.referralCode || '').catch(() => {});
-    showToast({ title: 'Referral code copied', tone: 'success' });
+    showToast({ title: t('accountPage.referralCodeCopied'), tone: 'success' });
   }
 
   return (
@@ -107,7 +109,7 @@ export default function AccountPage() {
         />
         <div className="relative flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neon-blue">Player profile</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neon-blue">{t('accountPage.playerProfile')}</p>
             <h1 className="mt-2 font-display text-4xl font-black sm:text-5xl">
               <span className="neon-text-static">{user.username}</span>
             </h1>
@@ -116,7 +118,7 @@ export default function AccountPage() {
           <div className="flex items-center gap-2">
             {user.role === 'admin' && (
               <Link href="/admin" className="btn-ghost">
-                Admin
+                {t('nav.admin')}
               </Link>
             )}
             <button
@@ -127,7 +129,7 @@ export default function AccountPage() {
               }}
               className="btn-ghost"
             >
-              <LogOut className="h-4 w-4" /> Sign out
+              <LogOut className="h-4 w-4" /> {t('accountPage.signOut')}
             </button>
           </div>
         </div>
@@ -136,19 +138,19 @@ export default function AccountPage() {
         <div className="relative mt-8">
           <div className="mb-2 flex items-end justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Level</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">{t('accountPage.level')}</p>
               <p className="font-display text-3xl font-black">
                 <span className="neon-text-static">{lvl.level.toString().padStart(2, '0')}</span>
-                <span className="ml-2 text-base text-white/40">/ XP {user.xp.toLocaleString()}</span>
+                <span className="me-2 text-base text-white/40">/ XP {user.xp.toLocaleString()}</span>
               </p>
             </div>
             <p className="text-xs text-white/50">
-              {lvl.intoLevel} / {lvl.levelSize} XP to level {lvl.level + 1}
+              {lvl.intoLevel} / {lvl.levelSize} {t('accountPage.xpToLevel')} {lvl.level + 1}
             </p>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-white/5">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-neon-purple via-neon-blue to-neon-pink transition-all"
+              className="h-full rounded-full bg-gradient-to-l from-neon-purple via-neon-blue to-neon-pink transition-all"
               style={{ width: `${pct}%` }}
             />
           </div>
@@ -158,7 +160,7 @@ export default function AccountPage() {
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         {/* Achievements */}
         <section className="glass-card p-6 lg:col-span-2">
-          <h2 className="mb-5 font-display text-xl font-bold">Achievements</h2>
+          <h2 className="mb-5 font-display text-xl font-bold">{t('accountPage.achievements')}</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {ACHIEVEMENTS.map((a) => {
               const unlocked = user.achievements?.includes(a.id);
@@ -189,9 +191,9 @@ export default function AccountPage() {
 
         {/* Referral */}
         <section className="glass-card p-6">
-          <h2 className="mb-3 font-display text-xl font-bold">Referral</h2>
+          <h2 className="mb-3 font-display text-xl font-bold">{t('accountPage.referral')}</h2>
           <p className="text-sm text-white/60">
-            Share your code. Earn 200 XP and unlock the Recruiter badge.
+            {t('accountPage.referralDesc')}
           </p>
           <div className="mt-4 flex items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-mono">
             <span className="text-neon-blue">{user.referralCode}</span>
@@ -199,7 +201,7 @@ export default function AccountPage() {
               type="button"
               onClick={copyReferral}
               className="text-white/60 hover:text-white"
-              aria-label="Copy"
+              aria-label={t('accountPage.copy')}
             >
               <Copy className="h-4 w-4" />
             </button>
@@ -209,11 +211,11 @@ export default function AccountPage() {
             onClick={() => {
               const url = `${window.location.origin}/auth/signup?ref=${user.referralCode}`;
               navigator.clipboard.writeText(url).catch(() => {});
-              showToast({ title: 'Referral link copied', tone: 'success' });
+              showToast({ title: t('accountPage.referralLinkCopied'), tone: 'success' });
             }}
             className="btn-ghost mt-3 w-full justify-center"
           >
-            <Share2 className="h-4 w-4" /> Copy invite link
+            <Share2 className="h-4 w-4" /> {t('accountPage.copyInviteLink')}
           </button>
         </section>
       </div>
@@ -221,11 +223,11 @@ export default function AccountPage() {
       {/* Orders */}
       <section className="glass-card mt-8 p-6">
         <h2 className="mb-5 flex items-center gap-2 font-display text-xl font-bold">
-          <Package className="h-5 w-5 text-neon-blue" /> Orders
+          <Package className="h-5 w-5 text-neon-blue" /> {t('accountPage.orders')}
         </h2>
         {orders.length === 0 ? (
           <p className="text-sm text-white/50">
-            No orders yet. <Link href="/shop" className="text-neon-blue hover:underline">Start your first loadout →</Link>
+            {t('accountPage.noOrdersYet')} <Link href="/shop" className="text-neon-blue hover:underline">{t('accountPage.startFirstLoadout')}</Link>
           </p>
         ) : (
           <div className="space-y-3">
@@ -233,10 +235,10 @@ export default function AccountPage() {
               <div key={o.id} className="glass flex flex-wrap items-center justify-between gap-3 rounded-xl p-4">
                 <div>
                   <p className="font-mono text-xs text-white/50">{o.id}</p>
-                  <p className="font-display text-base font-bold">{o.items.length} items</p>
+                  <p className="font-display text-base font-bold">{o.items.length} {t('accountPage.items')}</p>
                   <p className="text-xs text-white/40">{new Date(o.createdAt).toLocaleString()}</p>
                 </div>
-                <div className="text-right">
+                <div className="text-start">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-neon-green">
                     {o.status}
                   </p>

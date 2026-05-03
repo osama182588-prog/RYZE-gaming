@@ -8,6 +8,7 @@ import { useAuth } from '@/store/auth';
 import { CATEGORIES } from '@/data/categories';
 import { PRODUCTS } from '@/data/products';
 import { formatPrice } from '@/lib/utils';
+import { t } from '@/i18n';
 import type { Order } from '@/types';
 
 interface Stats {
@@ -37,17 +38,17 @@ export default function AdminPage() {
       return;
     }
     if (user.role !== 'admin') {
-      setError('You need admin access to view this dashboard.');
+      setError(t('adminPage.adminRoleRequired'));
       return;
     }
     fetch('/api/admin/stats')
       .then((r) => (r.ok ? r.json() : Promise.reject(r)))
       .then(setStats)
-      .catch(() => setError('Failed to load stats.'));
+      .catch(() => setError(t('errors.serverError')));
   }, [loading, user, router]);
 
   if (loading || !user) {
-    return <div className="ryze-container py-20 text-center text-white/50">Loading…</div>;
+    return <div className="ryze-container py-20 text-center text-white/50">{t('adminPage.loading')}</div>;
   }
 
   if (user.role !== 'admin') {
@@ -55,9 +56,9 @@ export default function AdminPage() {
       <div className="ryze-container py-20">
         <div className="glass-card mx-auto max-w-md p-8 text-center">
           <ShieldAlert className="mx-auto mb-3 h-10 w-10 text-neon-pink" />
-          <h1 className="font-display text-2xl font-bold">Access denied</h1>
-          <p className="mt-2 text-sm text-white/60">{error ?? 'Admin role required.'}</p>
-          <Link href="/" className="btn-ghost mt-5">Back to safety</Link>
+          <h1 className="font-display text-2xl font-bold">{t('adminPage.accessDenied')}</h1>
+          <p className="mt-2 text-sm text-white/60">{error ?? t('adminPage.adminRoleRequired')}</p>
+          <Link href="/" className="btn-ghost mt-5">{t('adminPage.backToSafety')}</Link>
         </div>
       </div>
     );
@@ -72,32 +73,32 @@ export default function AdminPage() {
     <div className="ryze-container py-12">
       <div className="mb-10 flex items-end justify-between">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neon-pink">Command Center</p>
-          <h1 className="mt-3 font-display text-4xl font-black sm:text-5xl">Admin</h1>
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neon-pink">{t('adminPage.commandCenter')}</p>
+          <h1 className="mt-3 font-display text-4xl font-black sm:text-5xl">{t('adminPage.admin')}</h1>
         </div>
         <p className="text-xs text-white/50">
-          Signed in as <span className="text-white">{user.username}</span>
+          {t('adminPage.signedInAs')} <span className="text-white">{user.username}</span>
         </p>
       </div>
 
       {!stats ? (
-        <p className="text-white/50">Loading metrics…</p>
+        <p className="text-white/50">{t('adminPage.loadingMetrics')}</p>
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <Stat Icon={DollarSign} label="Revenue" value={formatPrice(stats.revenue)} accent="text-neon-green" />
-            <Stat Icon={Package} label="Orders" value={stats.orderCount.toLocaleString()} accent="text-neon-blue" />
-            <Stat Icon={Users} label="Users" value={stats.userCount.toLocaleString()} accent="text-neon-purple" />
-            <Stat Icon={Mail} label="Subscribers" value={stats.subscriberCount.toLocaleString()} accent="text-neon-pink" />
+            <Stat Icon={DollarSign} label={t('adminPage.revenue')} value={formatPrice(stats.revenue)} accent="text-neon-green" />
+            <Stat Icon={Package} label={t('adminPage.ordersLabel')} value={stats.orderCount.toLocaleString()} accent="text-neon-blue" />
+            <Stat Icon={Users} label={t('adminPage.users')} value={stats.userCount.toLocaleString()} accent="text-neon-purple" />
+            <Stat Icon={Mail} label={t('adminPage.subscribers')} value={stats.subscriberCount.toLocaleString()} accent="text-neon-pink" />
           </div>
 
           <div className="mt-8 grid gap-6 lg:grid-cols-3">
             <section className="glass-card p-6 lg:col-span-2">
               <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-bold">
-                <Package className="h-5 w-5 text-neon-blue" /> Recent orders
+                <Package className="h-5 w-5 text-neon-blue" /> {t('adminPage.recentOrders')}
               </h2>
               {stats.recentOrders.length === 0 ? (
-                <p className="text-sm text-white/50">No orders yet.</p>
+                <p className="text-sm text-white/50">{t('adminPage.noOrdersYet')}</p>
               ) : (
                 <ul className="space-y-2">
                   {stats.recentOrders.map((o) => (
@@ -110,7 +111,7 @@ export default function AdminPage() {
                         <p className="text-white/80">{o.userEmail}</p>
                       </div>
                       <p className="text-white/50">
-                        {o.items.length} items · {new Date(o.createdAt).toLocaleString()}
+                        {o.items.length} {t('adminPage.items')} · {new Date(o.createdAt).toLocaleString()}
                       </p>
                       <p className="font-display text-base font-bold">{formatPrice(o.total)}</p>
                     </li>
@@ -121,7 +122,7 @@ export default function AdminPage() {
 
             <section className="glass-card p-6">
               <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-bold">
-                <Box className="h-5 w-5 text-neon-purple" /> Catalog
+                <Box className="h-5 w-5 text-neon-purple" /> {t('adminPage.catalog')}
               </h2>
               <ul className="space-y-2 text-sm">
                 {productsByCategory.map(({ category, count }) => (
@@ -134,7 +135,7 @@ export default function AdminPage() {
                   </li>
                 ))}
                 <li className="mt-2 flex items-center justify-between border-t border-white/10 px-3 pt-3 font-display font-bold">
-                  <span>Total</span>
+                  <span>{t('adminPage.totalLabel')}</span>
                   <span className="neon-text-static">{PRODUCTS.length}</span>
                 </li>
               </ul>
@@ -143,12 +144,11 @@ export default function AdminPage() {
 
           <section className="glass-card mt-8 p-6">
             <h2 className="mb-3 flex items-center gap-2 font-display text-lg font-bold">
-              <BarChart3 className="h-5 w-5 text-neon-blue" /> Notes
+              <BarChart3 className="h-5 w-5 text-neon-blue" /> {t('adminPage.notes')}
             </h2>
             <p className="text-sm text-white/60">
-              This is a demo admin built on a swappable in-memory store. Connect MongoDB by replacing
+              {t('adminPage.notesDesc')}
               <code className="mx-1 rounded bg-white/10 px-1 py-0.5 font-mono text-xs">src/lib/store.ts</code>
-              with a Mongo-backed implementation that exposes the same async API.
             </p>
           </section>
         </>

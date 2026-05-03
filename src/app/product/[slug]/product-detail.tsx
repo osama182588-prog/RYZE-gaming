@@ -8,10 +8,17 @@ import { Stars } from '@/components/ui/stars';
 import { useCart } from '@/store/cart';
 import { useUi } from '@/store/ui';
 import { cn, formatPrice } from '@/lib/utils';
+import { t } from '@/i18n';
 
 interface Props {
   product: Product;
 }
+
+const TAB_LABELS = {
+  description: 'الوصف',
+  specs: 'المواصفات',
+  reviews: 'التقييمات',
+} as const;
 
 export function ProductDetail({ product }: Props) {
   const [activeImage, setActiveImage] = useState(0);
@@ -57,7 +64,7 @@ export function ProductDetail({ product }: Props) {
       variantSummary,
     });
     setOpen(true);
-    showToast({ title: 'Locked & loaded', description: product.name, tone: 'success' });
+    showToast({ title: t('productDetail.lockedLoaded'), description: product.name, tone: 'success' });
   }
 
   return (
@@ -93,10 +100,10 @@ export function ProductDetail({ product }: Props) {
                 }}
               />
             </AnimatePresence>
-            <span className="absolute left-3 top-3 h-3 w-3 border-l border-t border-neon-purple" />
-            <span className="absolute right-3 top-3 h-3 w-3 border-r border-t border-neon-blue" />
-            <span className="absolute bottom-3 left-3 h-3 w-3 border-b border-l border-neon-pink" />
-            <span className="absolute bottom-3 right-3 h-3 w-3 border-b border-r border-neon-purple" />
+            <span className="absolute start-3 top-3 h-3 w-3 border-s border-t border-neon-purple" />
+            <span className="absolute end-3 top-3 h-3 w-3 border-e border-t border-neon-blue" />
+            <span className="absolute bottom-3 start-3 h-3 w-3 border-b border-s border-neon-pink" />
+            <span className="absolute bottom-3 end-3 h-3 w-3 border-b border-e border-neon-purple" />
           </div>
         </div>
         {product.images.length > 1 && (
@@ -112,7 +119,7 @@ export function ProductDetail({ product }: Props) {
                     ? 'border-neon-purple shadow-neon-purple'
                     : 'border-white/10 hover:border-white/30',
                 )}
-                aria-label={`View image ${i + 1}`}
+                aria-label={`${t('productDetail.viewImage')} ${i + 1}`}
               >
                 <img src={src} alt="" className="h-full w-full object-cover" />
               </button>
@@ -133,7 +140,7 @@ export function ProductDetail({ product }: Props) {
           <div className="mt-3 flex items-center gap-3">
             <Stars value={product.rating} />
             <span className="text-xs text-white/60">
-              {product.rating.toFixed(1)} · {product.reviewCount.toLocaleString()} reviews
+              {product.rating.toFixed(1)} · {product.reviewCount.toLocaleString()} {t('productDetail.reviews')}
             </span>
           </div>
         </div>
@@ -155,7 +162,7 @@ export function ProductDetail({ product }: Props) {
             <p className="label">
               {type}
               {selected[type] && (
-                <span className="ml-2 font-mono text-white/80">
+                <span className="ms-2 font-mono text-white/80">
                   {variants.find((v) => v.id === selected[type])?.name}
                 </span>
               )}
@@ -197,7 +204,7 @@ export function ProductDetail({ product }: Props) {
                   >
                     {v.name}
                     {v.priceDelta ? (
-                      <span className="ml-1 text-white/40">+${v.priceDelta}</span>
+                      <span className="ms-1 text-white/40">+${v.priceDelta}</span>
                     ) : null}
                   </button>
                 );
@@ -211,7 +218,7 @@ export function ProductDetail({ product }: Props) {
           <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5">
             <button
               type="button"
-              aria-label="Decrease quantity"
+              aria-label={t('productDetail.decreaseQty')}
               onClick={() => setQty(Math.max(1, qty - 1))}
               className="grid h-11 w-11 place-items-center text-white/80 hover:text-white"
             >
@@ -220,7 +227,7 @@ export function ProductDetail({ product }: Props) {
             <span className="w-10 text-center font-mono">{qty}</span>
             <button
               type="button"
-              aria-label="Increase quantity"
+              aria-label={t('productDetail.increaseQty')}
               onClick={() => setQty(Math.min(99, qty + 1))}
               className="grid h-11 w-11 place-items-center text-white/80 hover:text-white"
             >
@@ -228,13 +235,13 @@ export function ProductDetail({ product }: Props) {
             </button>
           </div>
           <button type="button" onClick={handleAdd} className="btn-primary flex-1">
-            <ShoppingCart className="h-4 w-4" /> Add to Loadout
+            <ShoppingCart className="h-4 w-4" /> {t('productDetail.addToLoadout')}
           </button>
           <button
             type="button"
-            aria-label="Wishlist"
+            aria-label={t('productDetail.wishlist')}
             className="btn-icon h-11 w-11"
-            onClick={() => showToast({ title: 'Saved to wishlist', tone: 'success' })}
+            onClick={() => showToast({ title: t('productDetail.savedToWishlist'), tone: 'success' })}
           >
             <Heart className="h-4 w-4" />
           </button>
@@ -243,9 +250,9 @@ export function ProductDetail({ product }: Props) {
         {/* Trust */}
         <div className="mt-4 grid grid-cols-3 gap-3">
           {[
-            { Icon: Truck, label: 'Free ship $99+' },
-            { Icon: ShieldCheck, label: '2-yr warranty' },
-            { Icon: Zap, label: 'Pro-tested' },
+            { Icon: Truck, label: t('productDetail.freeShip') },
+            { Icon: ShieldCheck, label: t('productDetail.warranty') },
+            { Icon: Zap, label: t('productDetail.proTested') },
           ].map(({ Icon, label }) => (
             <div key={label} className="glass flex items-center gap-2 rounded-xl p-3 text-xs">
               <Icon className="h-4 w-4 text-neon-blue" />
@@ -257,19 +264,19 @@ export function ProductDetail({ product }: Props) {
         {/* Tabs */}
         <div className="mt-4 border-t border-white/10 pt-6">
           <div className="mb-4 flex gap-2">
-            {(['description', 'specs', 'reviews'] as const).map((t) => (
+            {(['description', 'specs', 'reviews'] as const).map((tabKey) => (
               <button
-                key={t}
+                key={tabKey}
                 type="button"
-                onClick={() => setTab(t)}
+                onClick={() => setTab(tabKey)}
                 className={cn(
                   'rounded-full px-4 py-2 text-xs font-bold uppercase tracking-widest transition',
-                  tab === t
+                  tab === tabKey
                     ? 'bg-white text-void'
                     : 'text-white/60 hover:text-white',
                 )}
               >
-                {t === 'reviews' ? `Reviews (${product.reviewCount})` : t}
+                {tabKey === 'reviews' ? `${TAB_LABELS[tabKey]} (${product.reviewCount})` : TAB_LABELS[tabKey]}
               </button>
             ))}
           </div>
@@ -297,7 +304,7 @@ export function ProductDetail({ product }: Props) {
                       key={k}
                       className={cn('text-white/80', i % 2 === 0 ? 'bg-white/[0.02]' : '')}
                     >
-                      <th className="w-1/3 px-4 py-2 text-left text-xs font-bold uppercase tracking-widest text-white/50">
+                      <th className="w-1/3 px-4 py-2 text-start text-xs font-bold uppercase tracking-widest text-white/50">
                         {k}
                       </th>
                       <td className="px-4 py-2 font-mono">{v}</td>
@@ -319,8 +326,8 @@ export function ProductDetail({ product }: Props) {
                   <p className="text-sm font-semibold">{r.title}</p>
                   <p className="mt-1 text-sm text-white/60">{r.body}</p>
                   <p className="mt-2 text-[10px] uppercase tracking-widest text-white/40">
-                    {r.verified && <span className="text-neon-green">Verified buyer · </span>}
-                    {new Date(r.date).toLocaleDateString()}
+                    {r.verified && <span className="text-neon-green">{t('productDetail.verifiedBuyer')} · </span>}
+                    {new Date(r.date).toLocaleDateString('ar-SA')}
                   </p>
                 </div>
               ))}

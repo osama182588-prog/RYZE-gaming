@@ -1,20 +1,21 @@
 import type { Metadata } from 'next';
 import { Heart } from 'lucide-react';
 import { SETUPS } from '@/data/community';
+import { t } from '@/i18n';
 
 export const metadata: Metadata = {
-  title: 'Setup Inspiration',
-  description: 'Battlestations from the global RYZE community.',
+  title: 'إلهام الإعدادات | RYZE',
+  description: 'محطات قتالية من مجتمع RYZE العالمي.',
 };
 
 export default function SetupsPage() {
   return (
     <div className="ryze-container py-12">
       <div className="mb-12">
-        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neon-blue">Community</p>
-        <h1 className="mt-3 font-display text-4xl font-black sm:text-6xl">Setup Inspiration</h1>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neon-blue">{t('setupsPage.eyebrow')}</p>
+        <h1 className="mt-3 font-display text-4xl font-black sm:text-6xl">{t('setupsPage.title')}</h1>
         <p className="mt-3 max-w-2xl text-white/60">
-          Real battlestations from real players. Tap to see the gear, tag what inspires you, build your own.
+          {t('setupsPage.subtitle')}
         </p>
       </div>
 
@@ -34,7 +35,7 @@ export default function SetupsPage() {
               <p className="font-display text-lg font-bold">{s.title}</p>
               <div className="mt-1 flex items-center justify-between text-xs">
                 <p className="text-white/60">
-                  by <span className="text-white/90">{s.ownerHandle}</span>
+                  {t('setupsPage.by')} <span className="text-white/90">{s.ownerHandle}</span>
                 </p>
                 <span className="inline-flex items-center gap-1 text-white/80">
                   <Heart className="h-3.5 w-3.5 text-neon-pink" />
@@ -42,12 +43,12 @@ export default function SetupsPage() {
                 </span>
               </div>
               <div className="mt-2 flex flex-wrap gap-1">
-                {s.tags.map((t) => (
+                {s.tags.map((tag) => (
                   <span
-                    key={t}
+                    key={tag}
                     className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-widest text-white/60"
                   >
-                    #{t}
+                    #{tag}
                   </span>
                 ))}
               </div>

@@ -2,21 +2,22 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { DROPS } from '@/data/community';
 import { Countdown } from '@/components/ui/countdown';
-import { ArrowRight, Zap } from 'lucide-react';
+import { ArrowLeft, Zap } from 'lucide-react';
+import { t } from '@/i18n';
 
 export const metadata: Metadata = {
-  title: 'Limited Drops',
-  description: 'Numbered, time-locked capsule releases.',
+  title: 'إصدارات محدودة | RYZE',
+  description: 'كبسولات مرقّمة ومقيّدة بالوقت.',
 };
 
 export default function DropsPage() {
   return (
     <div className="ryze-container py-12">
       <div className="mb-12">
-        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neon-pink">Limited Drops</p>
-        <h1 className="mt-3 font-display text-4xl font-black sm:text-6xl">Capsules. Countdowns. Cult.</h1>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neon-pink">{t('dropsPage.eyebrow')}</p>
+        <h1 className="mt-3 font-display text-4xl font-black sm:text-6xl">{t('dropsPage.title')}</h1>
         <p className="mt-3 max-w-2xl text-white/60">
-          Each drop is engineered with a creator, numbered, and gone forever once the timer hits zero.
+          {t('dropsPage.subtitle')}
         </p>
       </div>
 
@@ -38,7 +39,7 @@ export default function DropsPage() {
             <div className="absolute inset-x-0 bottom-0 p-6">
               <div className="flex items-center gap-2">
                 <span className="badge-limited">
-                  <Zap className="h-2.5 w-2.5" /> {d.status}
+                  <Zap className="h-2.5 w-2.5" /> {d.status === 'live' ? t('dropsPage.live') : d.status === 'upcoming' ? t('dropsPage.upcoming') : t('dropsPage.sold')}
                 </span>
                 <span className="badge-pro">{d.rarity}</span>
               </div>
@@ -50,7 +51,7 @@ export default function DropsPage() {
                   compact
                 />
                 <span className="inline-flex items-center gap-1 text-sm font-semibold text-white/80 group-hover:text-white">
-                  Open <ArrowRight className="h-3.5 w-3.5" />
+                  {t('dropsPage.open')} <ArrowLeft className="h-3.5 w-3.5" />
                 </span>
               </div>
             </div>
