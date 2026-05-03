@@ -12,11 +12,11 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const parsed = Schema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ error: 'Invalid credentials.' }, { status: 400 });
+    return NextResponse.json({ error: 'بيانات الاعتماد غير صحيحة.' }, { status: 400 });
   }
   const user = await verifyPassword(parsed.data.email, parsed.data.password);
   if (!user) {
-    return NextResponse.json({ error: 'Email or password incorrect.' }, { status: 401 });
+    return NextResponse.json({ error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة.' }, { status: 401 });
   }
   const token = await signSession({
     uid: user.id,

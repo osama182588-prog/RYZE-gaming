@@ -63,7 +63,7 @@ export function Logo({ className, showWord = true, size = 'md', href = '/' }: Lo
 
   if (!href) return content;
   return (
-    <Link href={href} aria-label="RYZE home">
+    <Link href={href} aria-label="الصفحة الرئيسية لـ RYZE">
       {content}
     </Link>
   );

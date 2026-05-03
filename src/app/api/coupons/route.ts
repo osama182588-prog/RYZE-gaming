@@ -6,10 +6,10 @@ export async function POST(req: NextRequest) {
   const code: string = body.code ?? '';
   const subtotal: number = Number(body.subtotal ?? 0);
   const coupon = findCoupon(code);
-  if (!coupon) return NextResponse.json({ error: 'Code not recognized.' }, { status: 404 });
+  if (!coupon) return NextResponse.json({ error: 'الرمز غير صالح.' }, { status: 404 });
   if (coupon.minSubtotal && subtotal < coupon.minSubtotal) {
     return NextResponse.json(
-      { error: `Spend $${coupon.minSubtotal.toFixed(0)}+ to use this code.` },
+      { error: `يجب إنفاق ${coupon.minSubtotal.toFixed(0)}$ على الأقل لاستخدام هذا الرمز.` },
       { status: 400 },
     );
   }

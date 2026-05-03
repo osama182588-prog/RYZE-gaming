@@ -13,10 +13,10 @@ const Schema = z.object({ code: z.string().min(2) });
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const parsed = Schema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: 'Invalid code' }, { status: 400 });
+  if (!parsed.success) return NextResponse.json({ error: 'رمز غير صالح' }, { status: 400 });
 
   const user = await getCurrentUser();
-  if (!user) return NextResponse.json({ error: 'Sign in to redeem.' }, { status: 401 });
+  if (!user) return NextResponse.json({ error: 'سجّل الدخول لاستبدال الرمز.' }, { status: 401 });
 
   await awardXp(user.id, 200);
   await grantAchievement(user.id, 'a_referral');
