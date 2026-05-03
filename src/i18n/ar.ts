@@ -227,9 +227,9 @@ export const ar = {
     title: 'السلة',
     yourLoadout: 'تجهيزتك',
     empty: 'السلة فارغة',
-    equipKit: 'جهّز عُدتك. الترسانة بانتظارك.',
+    emptyMessage: 'جهّز عُدتك. الترسانة بانتظارك.',
     browseGear: 'تصفح المنتجات',
-    viewFullCart: 'عرض السلة الكاملة ←',
+    viewFullCart: 'عرض السلة الكاملة',
     promoCode: 'كود خصم',
     apply: 'تطبيق',
     subtotal: 'المجموع الفرعي',
@@ -245,6 +245,9 @@ export const ar = {
     couldNotApply: 'لم نتمكن من تطبيق الكود',
     remove: 'حذف',
     qty: 'الكمية',
+    decreaseQty: 'إنقاص الكمية',
+    increaseQty: 'زيادة الكمية',
+    removeItem: 'حذف المنتج',
   },
 
   // Checkout
